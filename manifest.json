@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "Lavendar: Text-to-Speech Reader",
+    "version": "1.0",
+    "description": "A voice tool to read text aloud from any point on the page using your system voice.",
+    "permissions": ["conextMenus", "scripting", "activeTab"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "conent_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["content.js"]
+        }
+    ],
+    "action": {
+        "default_icon": "icon.png"
+    },
+    "icons": {
+        "128": "icon.png"
+    }
+}
