@@ -1,6 +1,6 @@
-# 🪻 Lavender: Text-to-Speech Reader
+# 🪻 Inkchant: Text-to-Speech Reader
 
-**Lavender** is a Chrome Extension that reads aloud text from any point on a webpage using your system's natural voice — all triggered from a simple right-click.
+**Inkchant** is a Chrome Extension that reads aloud text from any point on a webpage using your system's natural voice — all triggered from a simple right-click.
 
 > ✨ This was my **first Chrome Extension project**, built as a way to learn how browser extensions work using JavaScript, the Chrome Extensions API, and the Web Speech API.  
 > Please be kind — I'm learning as I go 💜
@@ -9,8 +9,8 @@
 
 ## 🎯 What It Does
 
-With Lavender installed, you can:
-- **Right-click** anywhere on a webpage and choose **"Read from Here with Lavender"**
+With Inkchant installed, you can:
+- **Right-click** anywhere on a webpage and choose **"Read from Here with Inkchant"**
 - Have the text **read aloud from that point forward**
 - Hear it read in a **calm, natural-sounding voice**, like Siri or Microsoft Zira
 
