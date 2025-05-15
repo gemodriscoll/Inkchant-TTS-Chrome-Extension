@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Lavender: Text-to-Speech Reader",
+  "version": "1.0",
+  "permissions": ["scripting", "activeTab", "contextMenus"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["widget.css"]
+    }
+  ],
+  "action": {
+    "default_icon": "icon.png"
+  },
+  "icons": {
+    "128": "icon.png"
+  }
+}
