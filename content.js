@@ -1,9 +1,11 @@
+// This script creates a draggable widget with play, pause, and stop buttons for speech synthesis.
 if (!document.getElementById("inkchant-widget")) {
   const pauseImg = chrome.runtime.getURL("icons/pause.png");
   const playImg = chrome.runtime.getURL("icons/play.png");
   const stopImg = chrome.runtime.getURL("icons/stop.png");
   const headerImg = chrome.runtime.getURL("icons/icon.png");
 
+  // Create the widget
   const widget = document.createElement("div");
   widget.id = "inkchant-widget";
   widget.innerHTML = `

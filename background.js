@@ -1,3 +1,4 @@
+// Context Menu Item Script
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         id: "inkchantRead",
@@ -6,11 +7,14 @@ chrome.runtime.onInstalled.addListener(() => {
     });
 });
 
+// Context Menu Click Handler
 chrome.contextMenus.onClicked.addListener((info, tab) => {
+    // Check if the clicked menu item is the one we created
     if (info.menuItemId === "inkchantRead") {
         chrome.scripting.executeScript({
             target: { tabId: tab.id },
             func: (selectedText) => {
+                // Function to get all text nodes in the document
                 function getAllTextNodes(node) {
                     let walker = document.createTreeWalker(
                         node,
@@ -33,6 +37,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     return textNodes;
                 }
 
+                // Function to get text from selection or the whole page
                 function getTextFromSelectionOrPage(selectedText) {
                     if (selectedText) {
                         // Find the selected text in the page and get everything after it
@@ -48,7 +53,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     }
                 }
 
-                //Note to self: Plan to change this to a TTS API so that the voice is more consistent and better quality
+                // Note to self: Plan to change this to a TTS API so that the voice is more consistent and better quality
                 function speakWithBestVoice(text) {
                     const voices = speechSynthesis.getVoices();
                     const bestVoice =
@@ -67,6 +72,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     speechSynthesis.speak(utterance);
                 }
 
+                // Get the selected text or the whole page text and trim it to remove whitespace
                 let text = getTextFromSelectionOrPage(selectedText).trim();
                 if (!text) return;
 
