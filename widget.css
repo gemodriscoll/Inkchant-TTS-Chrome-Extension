@@ -16,7 +16,7 @@
 }
 
 #lavender-widget-header {
-  background: url("icons/header.png") no-repeat center/contain;
+  background: url("header.png") no-repeat center/contain;
   width: 100%;
   height: 48px;
   cursor: move;
@@ -36,15 +36,15 @@
 }
 
 #lavender-pause {
-  background-image: url("icons/pause.png");
+  background-image: url("pause.png");
 }
 
 #lavender-resume {
-  background-image: url("icons/play.png");
+  background-image: url("play.png");
 }
 
 #lavender-stop {
-  background-image: url("icons/stop.png");
+  background-image: url("stop.png");
 }
 
 #lavender-controls {
