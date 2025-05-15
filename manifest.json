@@ -3,7 +3,7 @@
   "name": "Lavender: Text-to-Speech Reader",
   "version": "1.0",
   "description": "A calming floating widget that reads text aloud using natural system voices.",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "contextMenus"],
   "background": {
     "service_worker": "background.js"
   },

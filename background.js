@@ -2,7 +2,7 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         id: "lavenderRead",
         title: "Read from Here with Lavender",
-        contexts: ["selection", "page"],
+        contexts: ["page", "selection"], 
     });
 });
 
@@ -48,24 +48,35 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     }
                 }
 
+                //Note to self: Plan to change this to a TTS API so that the voice is more consistent and better quality
+                function speakWithBestVoice(text) {
+                    const voices = speechSynthesis.getVoices();
+                    const bestVoice =
+                        voices.find(v => v.name.toLowerCase().includes("moira")) ||
+                        voices.find(v => /siri|google|zira|david|neural/i.test(v.name)) ||
+                        voices.find(v => v.lang.startsWith('en')) ||
+                        voices[0];
+
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    if (bestVoice) utterance.voice = bestVoice;
+                    utterance.rate = 0.95;
+                    utterance.pitch = 1.0;
+
+                    window.currentUtterance = utterance;
+                    speechSynthesis.cancel();
+                    speechSynthesis.speak(utterance);
+                }
+
                 let text = getTextFromSelectionOrPage(selectedText).trim();
                 if (!text) return;
 
-                const utterance = new SpeechSynthesisUtterance(text);
-                const voices = speechSynthesis.getVoices();
-                const bestVoice =
-                    voices.find(v => v.name.toLowerCase().includes("moira")) ||
-                    voices.find(v => /siri|google|zira|david|neural/i.test(v.name)) ||
-                    voices.find(v => v.lang.startsWith('en')) ||
-                    voices[0];
-
-                utterance.voice = bestVoice;
-                utterance.rate = 1.2;
-                utterance.pitch = 1.0;
-
-                window.currentUtterance = utterance;
-                speechSynthesis.cancel();
-                speechSynthesis.speak(utterance);
+                if (speechSynthesis.getVoices().length === 0) {
+                    speechSynthesis.onvoiceschanged = () => {
+                        speakWithBestVoice(text);
+                    };
+                } else {
+                    speakWithBestVoice(text);
+                }
             },
             args: [info.selectionText || ""]
         });
