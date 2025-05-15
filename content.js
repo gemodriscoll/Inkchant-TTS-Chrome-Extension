@@ -1,12 +1,25 @@
 if (!document.getElementById("lavender-widget")) {
+  const pauseImg = chrome.runtime.getURL("icons/pause.png");
+  const playImg = chrome.runtime.getURL("icons/play.png");
+  const stopImg = chrome.runtime.getURL("icons/stop.png");
+  const headerImg = chrome.runtime.getURL("icons/icon.png");
+
   const widget = document.createElement("div");
   widget.id = "lavender-widget";
   widget.innerHTML = `
-    <div id="lavender-widget-header"></div>
+    <div id="lavender-widget-header" style="display: flex; justify-content: center; align-items: center;">
+      <img src="${headerImg}" alt="Header" style="height:96px;">
+    </div>
     <div id="lavender-controls">
-      <button id="lavender-pause" class="lavender-btn" title="Pause">⏸️</button>
-      <button id="lavender-resume" class="lavender-btn" title="Resume">▶️</button>
-      <button id="lavender-stop" class="lavender-btn" title="Stop">⏹️</button>
+      <button id="lavender-pause" class="lavender-btn" title="Pause">
+        <img src="${pauseImg}" alt="Pause" style="width:64px;height:64px;">
+      </button>
+      <button id="lavender-resume" class="lavender-btn" title="Resume">
+        <img src="${playImg}" alt="Resume" style="width:64px;height:64px;">
+      </button>
+      <button id="lavender-stop" class="lavender-btn" title="Stop">
+        <img src="${stopImg}" alt="Stop" style="width:64px;height:64px;">
+      </button>
     </div>
   `;
   document.body.appendChild(widget);

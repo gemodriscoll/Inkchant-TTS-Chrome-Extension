@@ -5,46 +5,62 @@
   background-color: #E6E6FA;
   border: 2px solid #D8BFD8;
   border-radius: 12px;
-  padding: 12px 12px 8px;
+  padding: 16px 16px 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 9999;
-  width: 180px;
+  width: 260px;
+  height: 200px; 
   font-family: "Segoe UI", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center; 
+  opacity: 0.90; 
+  backdrop-filter: blur(2px); 
 }
 
 #lavender-widget-header {
-  background: url("icon.png") no-repeat center/contain;
+  background: url("icons/icon.png") no-repeat center/contain;
   width: 100%;
-  height: 48px;
+  height: 96px;
   cursor: move;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 
 .lavender-btn {
-  width: 40px;
-  height: 40px;
-  background-color: transparent;
+  background: transparent;
   border: none;
-  margin: 6px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  border-radius: 8px;
+  padding: 4px;
+  transition: background 0.2s;
   cursor: pointer;
 }
 
+.lavender-btn:hover,
+.lavender-btn:focus {
+  background: transparent;
+  outline: none;
+}
+
+.lavender-btn img {
+  transition: filter 0.2s;
+}
+
+.lavender-btn:hover img,
+.lavender-btn:focus img {
+  filter: brightness(1.2) drop-shadow(0 0 6px rgba(255,255,255,0.6));
+}
+
 #lavender-pause {
-  background-image: url("pause.png");
+  background-image: url("icons/pause.png");
 }
 
 #lavender-resume {
-  background-image: url("play.png");
+  background-image: url("icons/play.png");
 }
 
 #lavender-stop {
-  background-image: url("stop.png");
+  background-image: url("icons/stop.png");
 }
 
 #lavender-controls {
