@@ -1,23 +1,23 @@
-if (!document.getElementById("lavender-widget")) {
+if (!document.getElementById("inkchant-widget")) {
   const pauseImg = chrome.runtime.getURL("icons/pause.png");
   const playImg = chrome.runtime.getURL("icons/play.png");
   const stopImg = chrome.runtime.getURL("icons/stop.png");
   const headerImg = chrome.runtime.getURL("icons/icon.png");
 
   const widget = document.createElement("div");
-  widget.id = "lavender-widget";
+  widget.id = "inkchant-widget";
   widget.innerHTML = `
-    <div id="lavender-widget-header" style="display: flex; justify-content: center; align-items: center;">
+    <div id="inkchant-widget-header" style="display: flex; justify-content: center; align-items: center;">
       <img src="${headerImg}" alt="Header" style="height:96px;">
     </div>
-    <div id="lavender-controls">
-      <button id="lavender-pause" class="lavender-btn" title="Pause">
+    <div id="inkchant-controls">
+      <button id="inkchant-pause" class="inkchant-btn" title="Pause">
         <img src="${pauseImg}" alt="Pause" style="width:64px;height:64px;">
       </button>
-      <button id="lavender-resume" class="lavender-btn" title="Resume">
+      <button id="inkchant-resume" class="inkchant-btn" title="Resume">
         <img src="${playImg}" alt="Resume" style="width:64px;height:64px;">
       </button>
-      <button id="lavender-stop" class="lavender-btn" title="Stop">
+      <button id="inkchant-stop" class="lavender-btn" title="Stop">
         <img src="${stopImg}" alt="Stop" style="width:64px;height:64px;">
       </button>
     </div>
@@ -26,7 +26,7 @@ if (!document.getElementById("lavender-widget")) {
 
   // Dragging
   let isDragging = false, offsetX = 0, offsetY = 0;
-  const header = widget.querySelector("#lavender-widget-header");
+  const header = widget.querySelector("#inkchant-widget-header");
 
   // Mouse events
   header.addEventListener("mousedown", (e) => {
@@ -69,7 +69,7 @@ if (!document.getElementById("lavender-widget")) {
   document.addEventListener("touchend", () => isDragging = false);
 
   // Button events
-  document.getElementById("lavender-pause").addEventListener("click", () => speechSynthesis.pause());
-  document.getElementById("lavender-resume").addEventListener("click", () => speechSynthesis.resume());
-  document.getElementById("lavender-stop").addEventListener("click", () => speechSynthesis.cancel());
+  document.getElementById("inkchant-pause").addEventListener("click", () => speechSynthesis.pause());
+  document.getElementById("inkchant-resume").addEventListener("click", () => speechSynthesis.resume());
+  document.getElementById("inkchant-stop").addEventListener("click", () => speechSynthesis.cancel());
 }

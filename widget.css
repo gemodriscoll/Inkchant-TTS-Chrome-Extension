@@ -1,4 +1,4 @@
-#lavender-widget {
+#inkchant-widget {
   position: fixed;
   bottom: 20px;
   right: 20px;
@@ -19,7 +19,7 @@
   backdrop-filter: blur(2px); 
 }
 
-#lavender-widget-header {
+#inkkchant-widget-header {
   background: url("icons/icon.png") no-repeat center/contain;
   width: 100%;
   height: 96px;
@@ -27,7 +27,7 @@
   margin-bottom: 20px;
 }
 
-.lavender-btn {
+.inkchant-btn {
   background: transparent;
   border: none;
   border-radius: 8px;
@@ -36,34 +36,34 @@
   cursor: pointer;
 }
 
-.lavender-btn:hover,
-.lavender-btn:focus {
+.inkchant-btn:hover,
+.inkchant-btn:focus {
   background: transparent;
   outline: none;
 }
 
-.lavender-btn img {
+.inkchant-btn img {
   transition: filter 0.2s;
 }
 
-.lavender-btn:hover img,
-.lavender-btn:focus img {
+.inkchant-btn:hover img,
+.inkkchant-btn:focus img {
   filter: brightness(1.2) drop-shadow(0 0 6px rgba(255,255,255,0.6));
 }
 
-#lavender-pause {
+#inkchant-pause {
   background-image: url("icons/pause.png");
 }
 
-#lavender-resume {
+#inkchant-resume {
   background-image: url("icons/play.png");
 }
 
-#lavender-stop {
+#inkchant-stop {
   background-image: url("icons/stop.png");
 }
 
-#lavender-controls {
+#inkchant-controls {
   display: flex;
   justify-content: center;
   gap: 10px;

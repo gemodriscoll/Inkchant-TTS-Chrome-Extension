@@ -1,13 +1,13 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
-        id: "lavenderRead",
-        title: "Read from Here with Lavender",
+        id: "inkchantRead",
+        title: "Read from Here with Inkchant",
         contexts: ["page", "selection"], 
     });
 });
 
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-    if (info.menuItemId === "lavenderRead") {
+    if (info.menuItemId === "inkchantRead") {
         chrome.scripting.executeScript({
             target: { tabId: tab.id },
             func: (selectedText) => {
