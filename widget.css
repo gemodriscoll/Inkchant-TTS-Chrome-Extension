@@ -16,7 +16,7 @@
 }
 
 #lavender-widget-header {
-  background: url("header.png") no-repeat center/contain;
+  background: url("icon.png") no-repeat center/contain;
   width: 100%;
   height: 48px;
   cursor: move;
