@@ -83,7 +83,7 @@ if (!document.getElementById("inkchant-widget")) {
   // 🔊 Azure TTS playback
   async function playTTS(text) {
     const subscriptionKey = "YOUR_AZURE_SUBSCRIPTION_KEY"; // 🔥 Replace securely
-    const region = "australiaeast";
+    const region = "australiaeast"; // 🔥 Replace with your Azure region mine is "australiaeast" for example
     const url = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`;
 
     const ssml = `
