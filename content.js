@@ -1,12 +1,14 @@
 if (!document.getElementById("inkchant-widget")) {
+  // Image assets
   const pauseImg = chrome.runtime.getURL("icons/pause.png");
   const playImg = chrome.runtime.getURL("icons/play.png");
   const stopImg = chrome.runtime.getURL("icons/stop.png");
   const headerImg = chrome.runtime.getURL("icons/icon.png");
 
+  // Audio object for playback control
   let audio = null;
 
-  // Create the widget
+  // Create the widget HTML
   const widget = document.createElement("div");
   widget.id = "inkchant-widget";
   widget.innerHTML = `
@@ -14,7 +16,7 @@ if (!document.getElementById("inkchant-widget")) {
       <img src="${headerImg}" alt="Header" style="height:96px;">
     </div>
     <textarea id="inkchant-input" placeholder="Enter text to read..." rows="3" style="width: 90%; margin: 8px auto; display: block;"></textarea>
-    <div id="inkchant-controls">
+    <div id="inkchant-controls" style="display: flex; justify-content: space-around;">
       <button id="inkchant-resume" class="inkchant-btn" title="Play/Resume">
         <img src="${playImg}" alt="Play" style="width:64px;height:64px;">
       </button>
@@ -28,10 +30,11 @@ if (!document.getElementById("inkchant-widget")) {
   `;
   document.body.appendChild(widget);
 
-  // Dragging logic (same as before)
+  // Drag-and-drop functionality
   let isDragging = false, offsetX = 0, offsetY = 0;
   const header = widget.querySelector("#inkchant-widget-header");
 
+  // Mouse drag
   header.addEventListener("mousedown", (e) => {
     isDragging = true;
     offsetX = e.clientX - widget.getBoundingClientRect().left;
@@ -44,12 +47,13 @@ if (!document.getElementById("inkchant-widget")) {
       widget.style.top = `${e.clientY - offsetY}px`;
       widget.style.right = "auto";
       widget.style.bottom = "auto";
+      widget.style.position = "fixed";
     }
   });
 
   document.addEventListener("mouseup", () => isDragging = false);
 
-  // Touch support
+  // Touch drag
   header.addEventListener("touchstart", (e) => {
     isDragging = true;
     const touch = e.touches[0];
@@ -65,26 +69,42 @@ if (!document.getElementById("inkchant-widget")) {
       widget.style.top = `${touch.clientY - offsetY}px`;
       widget.style.right = "auto";
       widget.style.bottom = "auto";
+      widget.style.position = "fixed";
       e.preventDefault();
     }
   });
 
   document.addEventListener("touchend", () => isDragging = false);
 
-  // 🔊 Fetch and play TTS from OpenAI
+  // 🔊 Azure TTS playback
   async function playTTS(text) {
-    const response = await fetch("https://api.openai.com/v1/audio/speech", {
+    const subscriptionKey = "YOUR_AZURE_SUBSCRIPTION_KEY"; // 🔥 Replace securely
+    const region = "australiaeast";
+    const url = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`;
+
+    const ssml = `
+      <speak version='1.0' xml:lang='en-US'>
+        <voice name='en-US-JennyNeural'>
+          ${text}
+        </voice>
+      </speak>`;
+
+    const response = await fetch(url, {
       method: "POST",
       headers: {
-        "Authorization": "Bearer REPLACE_WITH",
-        "Content-Type": "application/json"
+        "Ocp-Apim-Subscription-Key": subscriptionKey,
+        "Content-Type": "application/ssml+xml",
+        "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
+        "User-Agent": "Inkchant-Extension"
       },
-      body: JSON.stringify({
-        model: "tts-1",           
-        voice: "nova",            
-        input: text
-      })
+      body: ssml
     });
+
+    if (!response.ok) {
+      const err = await response.text();
+      console.error("Azure TTS Error:", err);
+      return;
+    }
 
     const audioBlob = await response.blob();
     const audioUrl = URL.createObjectURL(audioBlob);
@@ -98,12 +118,12 @@ if (!document.getElementById("inkchant-widget")) {
     audio.play();
   }
 
-  // 🎛 Button actions
+  // ▶️ Play / Resume
   document.getElementById("inkchant-resume").addEventListener("click", () => {
     const text = document.getElementById("inkchant-input").value.trim();
     if (!text) return;
 
-    // If audio exists and is paused, resume it
+    // If paused, resume. Else, generate new.
     if (audio && audio.paused) {
       audio.play();
     } else {
@@ -111,10 +131,12 @@ if (!document.getElementById("inkchant-widget")) {
     }
   });
 
+  // ⏸️ Pause
   document.getElementById("inkchant-pause").addEventListener("click", () => {
     if (audio) audio.pause();
   });
 
+  // ⏹️ Stop
   document.getElementById("inkchant-stop").addEventListener("click", () => {
     if (audio) {
       audio.pause();
