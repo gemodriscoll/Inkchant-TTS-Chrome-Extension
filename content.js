@@ -49,9 +49,9 @@ if (!document.getElementById("inkchant-widget")) {
     if (isDragging) {
       widget.style.left = `${e.clientX - offsetX}px`;
       widget.style.top = `${e.clientY - offsetY}px`;
-      widget.style.right = "auto";
-      widget.style.bottom = "auto";
-      widget.style.position = "fixed";
+      widget.style.right = "auto"; // Check this doesn't ninterfere with css padding
+      widget.style.bottom = "auto"; // Check this doesn't interfere with css padding
+      widget.style.position = "fixed"; // Check this doesn't interfere with css padding
     }
   });
 
@@ -71,9 +71,9 @@ if (!document.getElementById("inkchant-widget")) {
       const touch = e.touches[0];
       widget.style.left = `${touch.clientX - offsetX}px`;
       widget.style.top = `${touch.clientY - offsetY}px`;
-      widget.style.right = "auto";
-      widget.style.bottom = "auto";
-      widget.style.position = "fixed";
+      widget.style.right = "auto"; // Check this doesn't interfere with css padding
+      widget.style.bottom = "auto"; // Check this doesn't interfere with css padding
+      widget.style.position = "fixed"; // Check this doesn't interfere with css padding
       e.preventDefault();
     }
   });
