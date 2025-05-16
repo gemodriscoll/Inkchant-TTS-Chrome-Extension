@@ -4,67 +4,17 @@
   right: 20px;
   background-color: #E6E6FA;
   border: 2px solid #D8BFD8;
-  border-radius: 12px;
-  padding: 16px 16px 12px;
+  border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   z-index: 9999;
-  width: 260px;
-  height: 200px; 
+  padding: 10px;
   font-family: "Segoe UI", sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center; 
-  opacity: 0.90; 
-  backdrop-filter: blur(2px); 
-}
-
-#inkkchant-widget-header {
-  background: url("icons/icon.png") no-repeat center/contain;
-  width: 100%;
-  height: 96px;
-  cursor: move;
-  margin-bottom: 20px;
-}
-
-.inkchant-btn {
-  background: transparent;
-  border: none;
-  border-radius: 8px;
-  padding: 4px;
-  transition: background 0.2s;
-  cursor: pointer;
-}
-
-.inkchant-btn:hover,
-.inkchant-btn:focus {
-  background: transparent;
-  outline: none;
-}
-
-.inkchant-btn img {
-  transition: filter 0.2s;
-}
-
-.inkchant-btn:hover img,
-.inkkchant-btn:focus img {
-  filter: brightness(1.2) drop-shadow(0 0 6px rgba(255,255,255,0.6));
-}
-
-#inkchant-pause {
-  background-image: url("icons/pause.png");
-}
-
-#inkchant-resume {
-  background-image: url("icons/play.png");
-}
-
-#inkchant-stop {
-  background-image: url("icons/stop.png");
 }
 
 #inkchant-controls {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  align-items: center;
+  gap: 12px;
 }
+
