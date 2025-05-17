@@ -9,7 +9,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Context Menu Click Handler
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-    // Check if the clicked menu item is the one we created
+    // Checks if the clicked menu item is the one we created
     if (info.menuItemId === "inkchantRead") {
         chrome.scripting.executeScript({
             target: { tabId: tab.id },
