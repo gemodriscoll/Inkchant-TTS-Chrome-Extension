@@ -24,7 +24,6 @@ No need to highlight text or copy/paste anything — just click, sit back, and l
 | **JavaScript**      | Core logic and Web APIs                      |
 | **HTML/CSS**        | Popup UI                                     |
 | **Chrome Extensions API (Manifest V3)** | Extension structure, context menu setup |
-| **Web Speech API**  | Voice synthesis and playback                 |
 | **VS Code**         | Development environment                      |
 
 ---
@@ -35,12 +34,10 @@ No need to highlight text or copy/paste anything — just click, sit back, and l
 - 🗣️ Uses the best system voice available (Google, Siri, Microsoft, etc.)
 - ⏸️ Optional popup with pause, resume, and stop controls
 - 🌐 No highlighting required — just click and listen
-- 🧠 Designed for accessibility, productivity, and calm
 
 ---
 
 ## 🔮 Possible Future Upgrades
-
 - 🌐 Smart article-only reading (skip ads, menus)
 - 🎛️ Add voice speed/pitch controls
 - 🌙 Add dark mode to popup UI

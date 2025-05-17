@@ -12,26 +12,45 @@ if (!document.getElementById("inkchant-widget")) {
   let speechSynthesisUtterance = null;
   let lastText = ""; // Store the last text being read
 
+  // Ensure voices are loaded before selecting one
+  let voices = [];
+
+  function loadVoices() {
+    voices = speechSynthesis.getVoices();
+  }
+
+  if (speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = loadVoices;
+  } else {
+    loadVoices(); // Fallback for browsers that don't support the event
+  }
+
   // Function to play text using the system's default voice
   function playTTS(text) {
-    
     // Store the text being read
     lastText = text;
 
     // Create a new utterance
     speechSynthesisUtterance = new SpeechSynthesisUtterance(text);
 
-    // Get available voices
-    const voices = speechSynthesis.getVoices();
+    // Ensure voices are loaded
+    if (!voices.length) {
+      voices = speechSynthesis.getVoices();
+    }
 
-    // Select the best voice
+    // Prioritize specific voices (Siri, Google, Zira)
+    const preferredVoices = ["Siri", "Google", "Zira"];
     const bestVoice =
-      voices.find(v => v.name.toLowerCase().includes("moira")) || // Prioritize "Moira"
-      voices.find(v => /siri|google|zira|david|neural/i.test(v.name)) || // Common high-quality voices
+      voices.find(v => preferredVoices.some(name => v.name.toLowerCase().includes(name.toLowerCase()))) || // Match preferred voices
       voices.find(v => v.lang.startsWith("en")) || // Fallback to any English voice
       voices[0]; // Fallback to the first available voice
 
-    if (bestVoice) speechSynthesisUtterance.voice = bestVoice;
+    if (bestVoice) {
+      speechSynthesisUtterance.voice = bestVoice;
+      console.log(`Using voice: ${bestVoice.name}`);
+    } else {
+      console.log("No suitable voice found. Using default.");
+    }
 
     // Set properties for the utterance
     speechSynthesisUtterance.rate = 0.95; // Slightly slower for clarity
@@ -63,9 +82,33 @@ if (!document.getElementById("inkchant-widget")) {
   `;
   document.body.appendChild(widget);
 
+  // Create the small icon element
+  const icon = document.createElement("img");
+  icon.id = "inkchant-icon";
+  icon.src = headerImg; // Use the icon.png
+  icon.alt = "Inkchant Icon";
+  icon.style = `
+    display: none; 
+    position: fixed; 
+    bottom: 16px; 
+    right: 16px; 
+    width: 50px; 
+    height: 50px; 
+    cursor: pointer; 
+    z-index: 1000;
+  `;
+  document.body.appendChild(icon);
+
   // Close button functionality
   document.getElementById("inkchant-close-btn").addEventListener("click", () => {
-    widget.style.display = "none";
+  widget.style.display = "none"; // Hide the widget
+  icon.style.display = "block"; // Show the icon
+  });
+
+  // Icon click functionality to unhide the widget
+  icon.addEventListener("click", () => {
+  widget.style.display = "block"; // Show the widget
+  icon.style.display = "none"; // Hide the icon
   });
   
   // Drag-and-drop functionality
