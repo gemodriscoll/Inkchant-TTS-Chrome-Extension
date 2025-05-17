@@ -53,9 +53,8 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     }
                 }
 
-                // Note to self: Plan to change this to a TTS API so that the voice is more consistent and better quality
                 function speakWithBestVoice(text) {
-                    const voices = speechSynthesis.getVoices(); // Needs to be changes to TTS API
+                    const voices = speechSynthesis.getVoices(); 
                     const bestVoice =
                         voices.find(v => v.name.toLowerCase().includes("moira")) ||
                         voices.find(v => /siri|google|zira|david|neural/i.test(v.name)) ||
@@ -72,8 +71,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                     speechSynthesis.speak(utterance);
                 }
 
-                // Still want to do this but need to figure out how to do it with the new TTS API
-                // Get the selected text or the whole page text and trim it to remove whitespace
                 let text = getTextFromSelectionOrPage(selectedText).trim();
                 if (!text) return;
 
@@ -84,7 +81,6 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
                 } else {
                     speakWithBestVoice(text);
                 }
-                // End note to self
             },
             args: [info.selectionText || ""]
         });

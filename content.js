@@ -8,6 +8,40 @@ if (!document.getElementById("inkchant-widget")) {
   // Audio object for playback control
   let audio = null;
 
+  // Declare global variables
+  let speechSynthesisUtterance = null;
+  let lastText = ""; // Store the last text being read
+
+  // Function to play text using the system's default voice
+  function playTTS(text) {
+    
+    // Store the text being read
+    lastText = text;
+
+    // Create a new utterance
+    speechSynthesisUtterance = new SpeechSynthesisUtterance(text);
+
+    // Get available voices
+    const voices = speechSynthesis.getVoices();
+
+    // Select the best voice
+    const bestVoice =
+      voices.find(v => v.name.toLowerCase().includes("moira")) || // Prioritize "Moira"
+      voices.find(v => /siri|google|zira|david|neural/i.test(v.name)) || // Common high-quality voices
+      voices.find(v => v.lang.startsWith("en")) || // Fallback to any English voice
+      voices[0]; // Fallback to the first available voice
+
+    if (bestVoice) speechSynthesisUtterance.voice = bestVoice;
+
+    // Set properties for the utterance
+    speechSynthesisUtterance.rate = 0.95; // Slightly slower for clarity
+    speechSynthesisUtterance.pitch = 1.0; // Normal pitch
+    speechSynthesisUtterance.volume = 1.0; // Full volume
+
+    // Start speaking
+    speechSynthesis.speak(speechSynthesisUtterance);
+  }
+
   // Create the widget HTML
   const widget = document.createElement("div");
   widget.id = "inkchant-widget";
@@ -49,9 +83,9 @@ if (!document.getElementById("inkchant-widget")) {
     if (isDragging) {
       widget.style.left = `${e.clientX - offsetX}px`;
       widget.style.top = `${e.clientY - offsetY}px`;
-      widget.style.right = "auto"; // Check this doesn't ninterfere with css padding
-      widget.style.bottom = "auto"; // Check this doesn't interfere with css padding
-      widget.style.position = "fixed"; // Check this doesn't interfere with css padding
+      widget.style.right = "auto"; 
+      widget.style.bottom = "auto"; 
+      widget.style.position = "fixed"; 
     }
   });
 
@@ -71,80 +105,43 @@ if (!document.getElementById("inkchant-widget")) {
       const touch = e.touches[0];
       widget.style.left = `${touch.clientX - offsetX}px`;
       widget.style.top = `${touch.clientY - offsetY}px`;
-      widget.style.right = "auto"; // Check this doesn't interfere with css padding
-      widget.style.bottom = "auto"; // Check this doesn't interfere with css padding
-      widget.style.position = "fixed"; // Check this doesn't interfere with css padding
+      widget.style.right = "auto"; 
+      widget.style.bottom = "auto"; 
+      widget.style.position = "fixed"; 
       e.preventDefault();
     }
   });
 
   document.addEventListener("touchend", () => isDragging = false);
 
-  // 🔊 Azure TTS playback
-  async function playTTS(text) {
-    const subscriptionKey = "YOUR_AZURE_SUBSCRIPTION_KEY"; // 🔥 Replace securely
-    const region = "australiaeast"; // 🔥 Replace with your Azure region mine is "australiaeast" for example
-    const url = `https://${region}.tts.speech.microsoft.com/cognitiveservices/v1`;
-
-    const ssml = `
-      <speak version='1.0' xml:lang='en-US'>
-        <voice name='en-US-JennyNeural'>
-          ${text}
-        </voice>
-      </speak>`;
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Ocp-Apim-Subscription-Key": subscriptionKey,
-        "Content-Type": "application/ssml+xml",
-        "X-Microsoft-OutputFormat": "audio-24khz-48kbitrate-mono-mp3",
-        "User-Agent": "Inkchant-Extension"
-      },
-      body: ssml
-    });
-
-    if (!response.ok) {
-      const err = await response.text();
-      console.error("Azure TTS Error:", err);
-      return;
-    }
-
-    const audioBlob = await response.blob();
-    const audioUrl = URL.createObjectURL(audioBlob);
-
-    if (audio) {
-      audio.pause();
-      URL.revokeObjectURL(audio.src);
-    }
-
-    audio = new Audio(audioUrl);
-    audio.play();
-  }
-
   // ▶️ Play / Resume
   document.getElementById("inkchant-resume").addEventListener("click", () => {
-    const text = document.getElementById("inkchant-input").value.trim();
-    if (!text) return;
-
-    // If paused, resume. Else, generate new.
-    if (audio && audio.paused) {
-      audio.play();
-    } else {
-      playTTS(text);
+    // If paused, resume. Else, generate new speech.
+    if (speechSynthesis.paused) {
+      speechSynthesis.resume();
+      console.log("Resumed speech synthesis");
+    } else if (!speechSynthesis.speaking) {
+      if (lastText) {
+        playTTS(lastText); // Resume from the last text
+      } else {
+        console.log("No text to read");
+      }
     }
   });
 
   // ⏸️ Pause
   document.getElementById("inkchant-pause").addEventListener("click", () => {
-    if (audio) audio.pause();
+    if (speechSynthesis.speaking) {
+      speechSynthesis.pause();
+      console.log("Paused speech synthesis");
+    }
   });
 
   // ⏹️ Stop
   document.getElementById("inkchant-stop").addEventListener("click", () => {
-    if (audio) {
-      audio.pause();
-      audio.currentTime = 0;
+    if (speechSynthesis.speaking) {
+      speechSynthesis.cancel();
+      console.log("Stopped speech synthesis");
     }
   });
 }
