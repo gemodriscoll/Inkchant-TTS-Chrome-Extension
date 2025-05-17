@@ -14,11 +14,16 @@ if (!document.getElementById("inkchant-widget")) {
 
   // Ensure voices are loaded before selecting one
   let voices = [];
+  let voicesLoaded = false;
 
+  // Function to load voices
   function loadVoices() {
     voices = speechSynthesis.getVoices();
+    voicesLoaded = true;
+    console.log("Available voices:", voices.map(v => `${v.name} (${v.lang})`));
   }
 
+  // Load voices when the event is triggered
   if (speechSynthesis.onvoiceschanged !== undefined) {
     speechSynthesis.onvoiceschanged = loadVoices;
   } else {
@@ -27,39 +32,37 @@ if (!document.getElementById("inkchant-widget")) {
 
   // Function to play text using the system's default voice
   function playTTS(text) {
+    
+      // Ensure voices are loaded before proceeding
+        if (!voicesLoaded) {
+          console.log("Voices not loaded yet. Waiting...");
+          speechSynthesis.onvoiceschanged = () => {
+            loadVoices();
+            playTTS(text); // Retry playing the text after voices are loaded
+        };
+        return;
+    }
+
     // Store the text being read
-    lastText = text;
+    const lastText = text;
 
     // Create a new utterance
-    speechSynthesisUtterance = new SpeechSynthesisUtterance(text);
-
-    // Ensure voices are loaded
-    if (!voices.length) {
-      voices = speechSynthesis.getVoices();
-    }
-
-    // Prioritize specific voices (Siri, Google, Zira)
-    const preferredVoices = ["Siri", "Google", "Zira"];
-    const bestVoice =
-      voices.find(v => preferredVoices.some(name => v.name.toLowerCase().includes(name.toLowerCase()))) || // Match preferred voices
-      voices.find(v => v.lang.startsWith("en")) || // Fallback to any English voice
-      voices[0]; // Fallback to the first available voice
-
-    if (bestVoice) {
-      speechSynthesisUtterance.voice = bestVoice;
-      console.log(`Using voice: ${bestVoice.name}`);
-    } else {
-      console.log("No suitable voice found. Using default.");
-    }
+    const speechSynthesisUtterance = new SpeechSynthesisUtterance(lastText);
 
     // Set properties for the utterance
     speechSynthesisUtterance.rate = 0.95; // Slightly slower for clarity
     speechSynthesisUtterance.pitch = 1.0; // Normal pitch
     speechSynthesisUtterance.volume = 1.0; // Full volume
 
+    // Select a preferred voice
+    const preferredVoice = voices.find(voice => voice.name === 'Daniel (English (United Kingdom)) (en-GB)'); // Change to your preferred voice
+    if (preferredVoice) {
+      speechSynthesisUtterance.voice = preferredVoice;
+    }
+    
     // Start speaking
     speechSynthesis.speak(speechSynthesisUtterance);
-  }
+    }
 
   // Create the widget HTML
   const widget = document.createElement("div");
