@@ -1,0 +1,23 @@
+{
+  "name": "inkchant-tts-chrome-extension",
+  "version": "1.0.0",
+  "description": "**Inkchant** is a Chrome Extension that reads aloud text from any point on a webpage using your system's voice — all triggered from a simple right-click.",
+  "main": "background.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gemodriscoll/Inkchant-TTS-Chrome-Extension.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gemodriscoll/Inkchant-TTS-Chrome-Extension/issues"
+  },
+  "homepage": "https://github.com/gemodriscoll/Inkchant-TTS-Chrome-Extension#readme"
+}
