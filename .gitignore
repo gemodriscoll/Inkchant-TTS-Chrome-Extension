@@ -1,1 +1,37 @@
+# Node modules
 node_modules/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+
+# Optional npm cache
+.npm/
+
+# ESLint cache
+.eslintcache
+
+# REPL history
+.node_repl_history
+
+# npm pack output
+*.tgz
+
+# Environment variables file
+.env
+
+# macOS system files
+.DS_Store
+
+# VSCode settings
+.vscode/

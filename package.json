@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/gemodriscoll/Inkchant-TTS-Chrome-Extension/issues"
   },
-  "homepage": "https://github.com/gemodriscoll/Inkchant-TTS-Chrome-Extension#readme"
+  "homepage": "https://github.com/gemodriscoll/Inkchant-TTS-Chrome-Extension#readme",
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "vitest": "^3.1.3"
+  }
 }

@@ -5,14 +5,8 @@ if (!document.getElementById("inkchant-widget")) {
   const stopImg = chrome.runtime.getURL("icons/stop.png");
   const headerImg = chrome.runtime.getURL("icons/icon.png");
 
-  // Audio object for playback control
-  let audio = null;
-
   // Declare global variables
-  let speechSynthesisUtterance = null;
   let lastText = ""; // Store the last text being read
-
-  // Ensure voices are loaded before selecting one
   let voices = [];
   let voicesLoaded = false;
 
@@ -30,39 +24,60 @@ if (!document.getElementById("inkchant-widget")) {
     loadVoices(); // Fallback for browsers that don't support the event
   }
 
+  // Function to get the voices array
+  function getVoices() {
+    return voices;
+  }
+
   // Function to play text using the system's default voice
   function playTTS(text) {
-    
-      // Ensure voices are loaded before proceeding
-        if (!voicesLoaded) {
-          console.log("Voices not loaded yet. Waiting...");
-          speechSynthesis.onvoiceschanged = () => {
-            loadVoices();
-            playTTS(text); // Retry playing the text after voices are loaded
-        };
-        return;
+    if (!text || !text.trim()) {
+      // Do not proceed if the text is empty or only contains whitespace
+      console.error('Cannot play TTS: Text is empty or whitespace.');
+      return;
     }
 
-    // Store the text being read
-    const lastText = text;
+    lastText = text; // Update lastText only if the input is valid
 
-    // Create a new utterance
-    const speechSynthesisUtterance = new SpeechSynthesisUtterance(lastText);
-
-    // Set properties for the utterance
-    speechSynthesisUtterance.rate = 0.95; // Slightly slower for clarity
-    speechSynthesisUtterance.pitch = 1.0; // Normal pitch
-    speechSynthesisUtterance.volume = 1.0; // Full volume
-
-    // Select a preferred voice
-    const preferredVoice = voices.find(voice => voice.name === 'Daniel (English (United Kingdom)) (en-GB)'); // Change to your preferred voice
-    if (preferredVoice) {
-      speechSynthesisUtterance.voice = preferredVoice;
+    if (global.speechSynthesis.paused) {
+      // Resume speech synthesis if it is paused
+      global.speechSynthesis.resume();
+      return;
     }
-    
-    // Start speaking
-    speechSynthesis.speak(speechSynthesisUtterance);
+
+    if (!getVoicesLoaded()) {
+      // Retry logic if voices are not loaded
+      global.speechSynthesis.onvoiceschanged = () => {
+        playTTS(text);
+      };
+      return;
     }
+
+    const voices = getVoices(); // Use the getVoices function
+    if (!voices || voices.length === 0) {
+      console.error('No available voices to use for speech synthesis.');
+      return;
+    }
+
+    const voice = voices.find((v) => v.lang === 'en-GB') || voices[0];
+    if (!voice) {
+      console.error('No suitable voice found for speech synthesis.');
+      return;
+    }
+
+    global.chrome.tts.speak(text, {
+      rate: 0.95,
+      pitch: 1.0,
+      volume: 1.0,
+      voiceName: voice.name,
+      lang: voice.lang,
+      onEvent: (event) => {
+        if (event.type === 'error') {
+          console.error('Error during speech synthesis:', event.errorMessage);
+        }
+      },
+    });
+  }
 
   // Create the widget HTML
   const widget = document.createElement("div");
@@ -190,4 +205,22 @@ if (!document.getElementById("inkchant-widget")) {
       console.log("Stopped speech synthesis");
     }
   });
+
+  // Add this function if it's missing
+  function getVoicesLoaded() {
+    return voicesLoaded;
+  }
+
+  // Export functions and variables for testing
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = {
+      loadVoices,
+      playTTS,
+      getVoices: () => voices,
+      setVoices: (newVoices) => (voices = newVoices),
+      getVoicesLoaded: () => voicesLoaded,
+      setVoicesLoaded: (loaded) => (voicesLoaded = loaded),
+      getLastText: () => lastText,
+    };
+  }
 }
